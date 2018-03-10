@@ -59,6 +59,67 @@
 
 	}
 	function update(){
+		game.physics.arcade.collide(player, platforms);
+		game.physics.arcade.collide(stars, platforms);
+		game.physics.arcade.collide(enemy1, platforms);
+
+		player.body.velocity.x = 0;
+
+		if(cursors.left.isDown){
+			player.body.velocity.x = -150;
+			player.animations.play('left');
+		}
+		    else if (cursors.right.isDown){
+			player.body.velocity.x = +150;
+			player.animations.play('right');
+		    }
+		    else {
+		    	player.animations.stop();
+		    	player.frame = 4;
+		    }
+		    if(cursor.up.isDown && player.body.touching_down){
+		    	player.body.velocit.y = -300;
+		    }
+		    game.physics.arcade.overlap(player, stars, collectStar);
+            game.physics.arcade.overlap(player, enemy1, loseLife);
+            move.Enemy();
+            if(life<0){
+            	endGame();
+            }
+
+	}
+	function collectStar (player, star){
+		score = score + 1;
+		scoretext.setText(score);
+		star.kill();
+		star.reset(Math.floor(Math.random() *750), 0);
+
+
+	}
+	function loseLife (player, enemy){
+		life = life - 1;
+		lifetext.setText(life);
+
+		enemy.kill();
+		enemy.reset(Math.floor(Math.random() *750), 0);
+
+	}
+	function moveEnemy (){
+		if(enemy1.x > 759)
+			enemy1.animations.play('left');
+		enemy1.body.velocity.x = -120;
+	  }
+      else if (enemy1.x < 405){
+      	enemy1.animations.play('right');
+      	enemy1.body.velocity.x = 120;
+      }
+	}
+	function endGame (){
+		player.kill();
+		scorelabel.text = "GAME OVER ! You Scored" + score;
+		scoretext.visible = false;
+		lifelabel.text.visible = false;
+		lifetext.visible = false;       
 	}
 </script>
 </body>
